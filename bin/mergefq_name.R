@@ -3,7 +3,7 @@
 require(stringr)
 
 mergefq_name <- function(fqdir = getwd(), pattern, dryrun = TRUE) {
-  ffiles <- dir(path = fqdir, recursive = TRUE, pattern = "fastq+", full.names = TRUE)
+  ffiles <- dir(path = fqdir, recursive = TRUE, pattern = "fast(a|q|q.gz)", full.names = TRUE)
   samples <- unique(stringr::str_extract(basename(ffiles), pattern = pattern))
   cat(length(samples), "samples and", length(ffiles),"fastq files were found", "\n")
   

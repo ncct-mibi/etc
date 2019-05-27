@@ -1,13 +1,5 @@
----
-title: "etc"
-author: "Angel Angelov"
-output:
-  html_document:
-    toc: TRUE
-    keep_md: TRUE
----
 
-Various workflows, scripts and functions. Mostly in `R`.
+## Various workflows, scripts and functions. Mostly in `R`.
 
 ***
 
