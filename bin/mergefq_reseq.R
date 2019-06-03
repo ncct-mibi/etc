@@ -37,6 +37,7 @@ mergefq_reseq <- function(newpattern, newdir, oldpattern, olddir, dryrun = TRUE)
       
       #cat("pattern = ", pattern, "\n")
       
+      
       y <- grep(pattern = pattern, x = oldfiles, value = TRUE)
       if(length(y) == 0) { stop(paste(pattern, "not found!")) }
       
