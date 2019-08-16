@@ -1,7 +1,7 @@
-### SUBSET PROTEINS BY NAME ### 
+### SUBSET PROTEIN MULTIFASTA BY NAME ### 
 
-# Thus function takes a string vector of protein fasta headers and a protein fasta file and returns 
-# the protein sequences with matching headers
+# Thus function takes a string vector of protein fasta headers and a protein multifasta file and returns 
+# the protein entries with matching headers
 # fuzzy or exact match is suported, 
 # @argument exact = TRUE
 require(Biostrings)

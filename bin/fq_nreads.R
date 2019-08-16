@@ -1,4 +1,5 @@
 # get number of reads from fastq files
+# Illumina only!!! #
 library(Biostrings)
 library(tibble)
 
