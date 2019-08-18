@@ -1,12 +1,6 @@
----
-title: "Various workflows, scripts and functions"
-author: "A. Angelov, NCCT"
-output:
-  html_document:
-    toc: true
-    toc_depth: 2
-    toc_float: true
----
+
+# Various workflows, scripts and functions   
+*A. Angelov, NCCT*
 
 ***
 
