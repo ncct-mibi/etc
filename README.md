@@ -1,25 +1,38 @@
-## Various workflows, scripts and functions. Mostly in `R`.
+---
+title: "Various workflows, scripts and functions"
+author: "A. Angelov, NCCT"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
 
 ***
 
-### himap.R
+## himap.R
+
 **File**: `bin/himap.R`   
 This is a wrapper around the [HiMAP package](https://www.biorxiv.org/content/10.1101/565572v1) for 16S rDNA analysis. It processes `fastq` files to Operational Strain Units (OSU) abundance. The script is intended to be run from the command line. Try `himap.R -h` for help.   
 **Usage:**   
 Download the `himap.R` file and put it in your `$PATH` (e.g. `$HOME/bin`). For example in a terminal:   
+
 ```{r}
 wget https://raw.githubusercontent.com/angelovangel/etc/master/bin/himap.R
 mv himap.R $HOME/bin
 chmod a+x $HOME/bin/himap.R
 ```
+
 After that, the script can be run directly from terminal (but adjust the shebang to your system), e.g. `himap.R --help`. It will also attempt to install the required `R` packages.
 
 ***
 
-### Merge lane-splitted `fastq` files   
+## merge lane-splitted `fastq` files
+
 **File:** `bin/mergefq_name.R`   
 **Required:** `stringr`   
 Sometimes, you get `fastq` files which are split by lane, that is, the sequences from one sample are split in several different directories and files. This is the default behaviour of Basespace, or if the `bcl2fastq` was executed without the `--no-lane-splitting` option. The file structure in such cases might look like this:
+
 ```
 ├── 201903MW-125089967
 │   └── FASTQ_Generation_2019-04-26_21_28_46Z-176397177
@@ -36,24 +49,46 @@ This function merges the `fastq` files belonging to one sample, keeping the forw
 
 **Usage:**   
 Source the file and use the function in an `R` session. The `mergefq_name()` function takes these arguments:   
+
 - `fqdir` - where to start looking for `fastq` files (the search is recursive). Default is the current directory.     
 - `pattern` - regex pattern matching the sampleID part of the file.    
 - `dryrun` - logical, whether to actually do the merge. Default is `FALSE`      
 
 ```{r}
 devtools::source_url("https://raw.githubusercontent.com/angelovangel/etc/master/bin/mergefq_name.R") 
-
 mergefq_name(pattern = "sampleID_regex_pattern")
-
 ```
 
 ***
 
-### Merge `fastq` files from resequenced libraries
+## merge resequenced libraries
+
+**File:** `bin/mergefq_reseq.R`       
+
+**Required:**  `stringr` `magrittr`   
+
+For example, sample (or library) named AA_01 was resequenced and the reseq was named AA2_01.   
+The original and the reseq files are (they will be usually in different folders):   
+
+```
+ | old_seqs
+    | AA_01_S4_R1_001.fastq
+    | AA_01_S4_R2_001.fastq
+    | AA_02_S5_R1_001.fastq
+    | AA_02_S5_R2_00 1.fastq
+ | new_seqs
+    | AA2_01_S7_R1_001.fastq
+    | AA2_01_S7_R2_001.fastq
+    | AA2_02_S8_R1_001.fastq
+    | AA2_02_S8_R2_001.fastq
+```
+
+**Usage:**   
 
 ***
 
-### Subset protein `fasta` file
+## subset protein `fasta` file
+
 **File:** `bin/subset_proteins.R`   
 **Required:** `Biostrings`, `stringr`   
 Thus `R` function takes a string vector of protein fasta headers and a protein fasta file and returns 
