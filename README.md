@@ -1,6 +1,6 @@
+# Various workflows, scripts and functions
 
-# Various workflows, scripts and functions   
-*A. Angelov, NCCT*
+*aangeloo@gmail.com*
 
 ***
 
@@ -17,7 +17,7 @@ mv himap.R $HOME/bin
 chmod a+x $HOME/bin/himap.R
 ```
 
-After that, the script can be run directly from terminal (but adjust the shebang to your system), e.g. `himap.R --help`. It will also attempt to install the required `R` packages.
+After that, the script can be run directly from terminal (but adjust the shebang to your system). Try `himap.R --help` as a start, it will give you an idea of what you need to run it. The script will also attempt to install the required `R` packages, if missing.
 
 ***
 
@@ -25,7 +25,7 @@ After that, the script can be run directly from terminal (but adjust the shebang
 
 **File:** `bin/mergefq_name.R`   
 **Required:** `stringr`   
-Sometimes, you get `fastq` files which are split by lane, that is, the sequences from one sample are split in several different directories and files. This is the default behaviour of Basespace, or if the `bcl2fastq` was executed without the `--no-lane-splitting` option. The file structure in such cases might look like this:
+Sometimes you get `fastq` files which are split by lane, that is, the sequences from one sample are split in several different directories and files. This is the default behaviour of Basespace, or if the `bcl2fastq` was executed without the `--no-lane-splitting` option. The file structure in such cases might look like this:
 
 ```
 ├── 201903MW-125089967
@@ -85,8 +85,7 @@ The original and the reseq files are (they will be usually in different folders)
 
 **File:** `bin/subset_proteins.R`   
 **Required:** `Biostrings`, `stringr`   
-Thus `R` function takes a string vector of protein fasta headers and a protein fasta file and returns 
-the protein sequences with matching headers. Partial or exact match is supported (partial means that the string from beginning of the line upto the next whitespace is used in the search).   
+Thus `R` function takes a string vector of protein fasta headers and a protein fasta file and returns the protein sequences with matching headers. Partial or exact match is supported (partial means that the string from beginning of the line upto the next whitespace is used in the search).   
 **Usage:**   
 In an `R` session, do:
 `devtools::source_url("https://raw.githubusercontent.com/angelovangel/etc/master/bin/subset_proteins.R")`   
