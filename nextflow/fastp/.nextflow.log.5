@@ -1,0 +1,77 @@
+Sep-28 11:24:31.109 [main] DEBUG nextflow.cli.Launcher - $> nextflow run fastp.nf --readsdir /Users/angelangelov/Desktop/Yajing_16S/fastq/ -resume
+Sep-28 11:24:31.288 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 19.07.0
+Sep-28 11:24:31.300 [main] INFO  nextflow.cli.CmdRun - Launching `fastp.nf` [small_northcutt] - revision: 4362630a78
+Sep-28 11:24:31.380 [main] DEBUG nextflow.Session - Session uuid: d38bc55e-218c-448c-8fc3-c8acf959a954
+Sep-28 11:24:31.381 [main] DEBUG nextflow.Session - Run name: small_northcutt
+Sep-28 11:24:31.382 [main] DEBUG nextflow.Session - Executor pool size: 8
+Sep-28 11:24:32.433 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 19.07.0 build 5106
+  Created: 27-07-2019 13:22 UTC (15:22 CEST)
+  System: Mac OS X 10.14.6
+  Runtime: Groovy 2.5.6 on OpenJDK 64-Bit Server VM 11.0.2+7
+  Encoding: UTF-8 (UTF-8)
+  Process: 3044@Angels-MBP [192.168.2.107]
+  CPUs: 8 - Mem: 8 GB (215.2 MB) - Swap: 2 GB (1.3 GB)
+Sep-28 11:24:32.483 [main] DEBUG nextflow.Session - Work-dir: /Users/angelangelov/Desktop/nxf-crg/nf-fastp/work [Mac OS X]
+Sep-28 11:24:32.484 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /Users/angelangelov/Desktop/nxf-crg/nf-fastp/bin
+Sep-28 11:24:32.649 [main] DEBUG nextflow.Session - Session start invoked
+Sep-28 11:24:32.979 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Sep-28 11:24:32.994 [main] INFO  nextflow.Nextflow - F A S T P - M U L T I Q C   P I P E L I N E    
+===========================================
+
+reads dir        : /Users/angelangelov/Desktop/Yajing_16S/fastq/
+outdir       : results
+
+Sep-28 11:24:33.025 [PathVisitor-1] DEBUG nextflow.file.PathVisitor - files for syntax: glob; folder: /Users/angelangelov/Desktop/Yajing_16S/fastq/; pattern: *_L001_R{1,2}_001.fastq.gz; options: [checkIfExists:true]
+Sep-28 11:24:33.108 [main] DEBUG nextflow.splitter.AbstractSplitter - Creating gzip splitter for: /Users/angelangelov/Desktop/Yajing_16S/fastq/S4MN4_L001_R1_001.fastq.gz
+Sep-28 11:24:33.572 [main] DEBUG nextflow.splitter.AbstractSplitter - Creating gzip splitter for: /Users/angelangelov/Desktop/Yajing_16S/fastq/T1T2_L001_R2_001.fastq.gz
+Sep-28 11:24:33.853 [main] DEBUG nextflow.splitter.AbstractSplitter - Creating gzip splitter for: /Users/angelangelov/Desktop/Yajing_16S/fastq/MOD17_L001_R1_001.fastq.gz
+Sep-28 11:24:34.100 [main] DEBUG nextflow.splitter.AbstractSplitter - Creating gzip splitter for: /Users/angelangelov/Desktop/Yajing_16S/fastq/MOD18_L001_R1_001.fastq.gz
+Sep-28 11:24:34.285 [main] DEBUG nextflow.splitter.AbstractSplitter - Creating gzip splitter for: /Users/angelangelov/Desktop/Yajing_16S/fastq/MOD17_L001_R2_001.fastq.gz
+Sep-28 11:24:34.528 [main] DEBUG nextflow.splitter.AbstractSplitter - Creating gzip splitter for: /Users/angelangelov/Desktop/Yajing_16S/fastq/MOD18_L001_R2_001.fastq.gz
+Sep-28 11:24:34.709 [main] DEBUG nextflow.splitter.AbstractSplitter - Creating gzip splitter for: /Users/angelangelov/Desktop/Yajing_16S/fastq/S4MN4_L001_R2_001.fastq.gz
+Sep-28 11:24:34.949 [main] DEBUG nextflow.splitter.AbstractSplitter - Creating gzip splitter for: /Users/angelangelov/Desktop/Yajing_16S/fastq/T1T2_L001_R1_001.fastq.gz
+Sep-28 11:24:35.274 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Sep-28 11:24:35.274 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Sep-28 11:24:35.278 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Sep-28 11:24:35.282 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=8; memory=8 GB; capacity=8; pollInterval=100ms; dumpInterval=5m
+Sep-28 11:24:35.323 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > fastp -- maxForks: 8
+Sep-28 11:24:35.350 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Sep-28 11:24:35.350 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Sep-28 11:24:35.353 [main] DEBUG nextflow.processor.TaskProcessor - Creating operator > multiqc -- maxForks: 8
+Sep-28 11:24:35.357 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Sep-28 11:24:35.357 [main] DEBUG nextflow.Session - Session await
+Sep-28 11:24:35.461 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Sep-28 11:24:35.465 [Task submitter] INFO  nextflow.Session - [8c/61ea90] Submitted process > fastp (fastp on S4MN4)
+Sep-28 11:24:35.475 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Sep-28 11:24:35.476 [Task submitter] INFO  nextflow.Session - [3e/a5e748] Submitted process > fastp (fastp on MOD18)
+Sep-28 11:24:35.483 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Sep-28 11:24:35.483 [Task submitter] INFO  nextflow.Session - [57/a5cc02] Submitted process > fastp (fastp on MOD17)
+Sep-28 11:24:35.519 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Sep-28 11:24:35.520 [Task submitter] INFO  nextflow.Session - [c8/27b5c6] Submitted process > fastp (fastp on T1T2)
+Sep-28 11:24:38.761 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 3; name: fastp (fastp on MOD18); status: COMPLETED; exit: 0; error: -; workDir: /Users/angelangelov/Desktop/nxf-crg/nf-fastp/work/3e/a5e74868c0d22369beb29c6abbb6dd]
+Sep-28 11:24:38.786 [Task monitor] DEBUG n.util.BlockingThreadExecutorFactory - Thread pool name=FileTransfer; maxThreads=24; maxQueueSize=72; keepAlive=1m
+Sep-28 11:24:39.302 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: fastp (fastp on MOD17); status: COMPLETED; exit: 0; error: -; workDir: /Users/angelangelov/Desktop/nxf-crg/nf-fastp/work/57/a5cc020ba2d57cf307dcf49be39cd0]
+Sep-28 11:24:39.350 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 4; name: fastp (fastp on T1T2); status: COMPLETED; exit: 0; error: -; workDir: /Users/angelangelov/Desktop/nxf-crg/nf-fastp/work/c8/27b5c62299dafae39c987a28f1ecb5]
+Sep-28 11:24:39.394 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: fastp (fastp on S4MN4); status: COMPLETED; exit: 0; error: -; workDir: /Users/angelangelov/Desktop/nxf-crg/nf-fastp/work/8c/61ea9019638d606a9fa504c346218b]
+Sep-28 11:24:39.412 [Actor Thread 4] DEBUG nextflow.processor.TaskProcessor - Process multiqc > collision check staging file names: [input.4:1, fastp.json:4, input.1:1, input.2:1, input.3:1, multiqc_config.yaml:1]
+Sep-28 11:24:39.421 [Actor Thread 4] ERROR nextflow.processor.TaskProcessor - Error executing process > 'multiqc (1)'
+
+Caused by:
+  Process `multiqc` input file name collision -- There are multiple input files for each of the following file names: fastp.json
+
+
+Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
+Sep-28 11:24:39.427 [Actor Thread 4] DEBUG nextflow.Session - Session aborted -- Cause: Process `multiqc` input file name collision -- There are multiple input files for each of the following file names: fastp.json
+Sep-28 11:24:39.445 [Actor Thread 4] DEBUG nextflow.Session - The following nodes are still active:
+[process] multiqc
+  status=ACTIVE
+  port 0: (value) bound ; channel: x
+  port 1: (queue) closed; channel: y
+  port 2: (cntrl) -     ; channel: $
+
+Sep-28 11:24:39.447 [main] DEBUG nextflow.Session - Session await > all process finished
+Sep-28 11:24:39.447 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Sep-28 11:24:39.455 [main] DEBUG nextflow.trace.StatsObserver - Workflow completed > WorkflowStats[succeedCount=4; failedCount=0; ignoredCount=0; cachedCount=0; succeedDuration=14.7s; failedDuration=0ms; cachedDuration=0ms]
+Sep-28 11:24:39.653 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Sep-28 11:24:39.679 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye
