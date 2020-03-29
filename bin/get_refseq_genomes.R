@@ -35,7 +35,7 @@
                 help = "download only complete genomes [default = %default]"),
     make_option(c("-d", "--download"), type = "logical", default = FALSE,
                 action = "store_true",
-                help = "by default, the script does not download data, use this option to ACTUALLY DOWNLOAD - maight take a while! [default = %default] ")
+                help = "by default, the script does not download data, use this option to ACTUALLY DOWNLOAD - might take a while! [default = %default] ")
   )
   
   opt_parser <- OptionParser(description = "\nDownload refseq genomes from ncbi using a assembly_summary.txt file",
@@ -43,7 +43,7 @@
                              add_help_option = TRUE,
                              usage = "usage: get_refseq_genomes.R [options] \n---------------------------------",
                              epilogue = "A. Angelov | 2020 | aangeloo@gmail.com")
-  opt <- parse_args(opt_parser)
+  opt <- parse_args(opt_parser, )
   
   # initialization variables
   seqsummary_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt"
@@ -81,25 +81,26 @@
   
   # generate complete ftp urls
   
-  download_urls <- paste(
-    df$ftp_path,
+  download_urls <- file.path(
+    df$ftp_path, paste(basename(df$ftp_path),
     case_when(opt$type == "fna" ~ "_genomic.fna.gz",
               opt$type == "faa" ~ "_protein.faa.gz",
               opt$type == "gff" ~ "_genomic.gff.gz",
               opt$type == "gtf" ~ "_genomic.gtf.gz",
               opt$type == "gbff" ~ "_genomic.gbff.gz",
-              opt$type == "ft" ~ "_feature_table.txt.gz"),
-              sep = "")
+              opt$type == "ft" ~ "_feature_table.txt.gz"), sep = "")
+              )
   n_files <- length(download_urls)
   
   # download data (or not)
   #
   if(opt$download) {
     cat("Startind download of", n_files, "files\n")
-    Sys.sleep(3)
+    lapply(download_urls, function(x) download.file(x, destfile = file.path("refseq/", basename(x))) )
   } else {
     cat(paste(download_urls, "\n", sep = ""))
-    cat("These genomes will be downloaded if you use the '-d' option")
+    cat(n_files, "files found\n")
+    cat("these will be downloaded if you use the '-d' option\n")
   }
   
   
