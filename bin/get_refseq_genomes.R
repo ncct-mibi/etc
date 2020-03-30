@@ -6,7 +6,7 @@
 # use hints from
 # https://www.ncbi.nlm.nih.gov/genome/doc/ftpfaq/
 
-  PKGs <- c("data.table", "dplyr", "purrr","optparse", "curl", "stringr")
+  PKGs <- c("data.table", "dplyr", "purrr","optparse", "stringr")
   
   # rsync is required for this script to run!
   # just a check here for rsync
@@ -20,7 +20,7 @@
   )
 
   # options are: 
-  # -s --seqsummary --> path to seqsummary file, default ~/db/seqsummary
+  # -s --seqsummary --> path to previously downloaded seqsummary file, default ~/db/seqsummary
   # -u --update --> download new seqsummary file, do not use -s, default FALSE
   # -r --repres --> logical, download representative genomes only, all otherwise, default TRUE
   # -a --assembly --> character, filter by assembly level, options: complete, chromosome, contig, scaffold
@@ -29,10 +29,10 @@
   
   option_list <- list(
     make_option(c("-s", "--seqsummary"), type = "character", default = "~/db/assembly_summary.txt", 
-                help="path to downloaded assembly_summary.txt file [default = %default]"),
+                help="path to (previously downloaded) assembly_summary.txt file [default = %default]"),
     make_option(c("-u", "--update"), type = "logical", default = FALSE, 
                 action = "store_true", # if '-u' is seen, set to TRUE
-                help = "download and use new seqsummary file from ncbi [default = %default]" ),
+                help = "download and use new assembly_summary.txt file from ncbi [default = %default]" ),
     make_option(c("-t", "--type"), type = "character", default = "fna",
                 help = "type of sequence to download, possible values are 'fna', 'faa', 'gff', 'gtf', 'gbff', 'ft' [default = %default]"),
     make_option(c("-r", "--repres"), type = "logical", default = FALSE,
@@ -53,7 +53,7 @@
   opt_parser <- OptionParser(
     description = "\n Download refseq genomes from ncbi using a assembly_summary.txt file\n
  EXAMPLE to download representative complete genomes:\n
- get_refseq_genomes.R -u -r -c -d\n",
+ get_refseq_genomes.R -urcd\n",
     option_list = option_list,
     add_help_option = TRUE,
     usage = "usage: get_refseq_genomes.R [options] \n---------------------------------",

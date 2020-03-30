@@ -6,8 +6,9 @@
 
 ## himap.R
 
-**File**: `bin/himap.R`   
+**Rscript**: `bin/himap.R`   
 This is a wrapper around the [HiMAP package](https://www.biorxiv.org/content/10.1101/565572v1) for 16S rDNA analysis. It processes `fastq` files to Operational Strain Units (OSU) abundance. The script is intended to be run from the command line. Try `himap.R -h` for help.   
+
 **Usage:**   
 Download the `himap.R` file and put it in your `$PATH` (e.g. `$HOME/bin`). For example in a terminal:   
 
@@ -21,9 +22,10 @@ After that, the script can be run directly from terminal (but adjust the shebang
 
 ***
 
-## merge lane-splitted `fastq` files
+## Merge lane-splitted `fastq` files
 
 **File:** `bin/mergefq_name.R`   
+
 **Required:** `stringr`   
 Sometimes you get `fastq` files which are split by lane, that is, the sequences from one sample are split in several different directories and files. This is the default behaviour of Basespace, or if the `bcl2fastq` was executed without the `--no-lane-splitting` option. The file structure in such cases might look like this:
 
@@ -55,7 +57,7 @@ mergefq_name(pattern = "sampleID_regex_pattern")
 
 ***
 
-## merge resequenced libraries
+## Merge resequenced libraries
 
 **File:** `bin/mergefq_reseq.R`       
 
@@ -81,11 +83,28 @@ The original and the reseq files are (they will be usually in different folders)
 
 ***
 
-## subset protein `fasta` file
+## Download bacterial genomes from NCBI
+
+**Rscript:** `bin/get_refseq_genomes.R`   
+
+**Required:** `data.table`, `dplyr`, `purrr`, `optparse`, `stringr`   
+This R script downloads bacterial genomes from ncbi, using an assembly_summary.txt to filter and get ftp paths to genomes of interest. System calls to rsync are used, so `rsync` has to be available on the system.   
+
+**Usage:**
+In a terminal, do `bin/get_refseq_genomes.R -h` to get an idea how to use it. For example, to download all representative and complete genomes, using a fresh assembly_summary.txt from ncbi : 
+
+```
+get_refseq_genomes.R -urcd
+```
+
+***
+
+
+## Subset protein `fasta` file
 
 **File:** `bin/subset_proteins.R`   
 **Required:** `Biostrings`, `stringr`   
-Thus `R` function takes a string vector of protein fasta headers and a protein fasta file and returns the protein sequences with matching headers. Partial or exact match is supported (partial means that the string from beginning of the line upto the next whitespace is used in the search).   
+This `R` function takes a string vector of protein fasta headers and a protein fasta file and returns the protein sequences with matching headers. Partial or exact match is supported (partial means that the string from beginning of the line upto the next whitespace is used in the search).   
 **Usage:**   
 In an `R` session, do:
 `devtools::source_url("https://raw.githubusercontent.com/angelovangel/etc/master/bin/subset_proteins.R")`   
