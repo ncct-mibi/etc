@@ -25,6 +25,7 @@
   # -r --repres --> logical, download representative genomes only, all otherwise, default TRUE
   # -a --assembly --> character, filter by assembly level, options: complete, chromosome, contig, scaffold
   # -d --dry --> dry run, do not download data, just list files to be downloaded
+  # -k --keep --> keep original files, gunzip otherwise
   
   option_list <- list(
     make_option(c("-s", "--seqsummary"), type = "character", default = "~/db/assembly_summary.txt", 
@@ -42,14 +43,21 @@
                 help = "download only complete genomes [default = %default]"),
     make_option(c("-d", "--download"), type = "logical", default = FALSE,
                 action = "store_true",
-                help = "by default, the script does not download data, use this option to ACTUALLY DOWNLOAD - might take a while! [default = %default] ")
+                help = "by default, the script does not download data, 
+                use this option to ACTUALLY DOWNLOAD - might take a while! [default = %default] "),
+    make_option(c("-k", "--keep"), type = "logical", default = FALSE, 
+                action = "store_true", 
+                help = "keep original (.gz) files, by default they are unzipped [default = %default]")
   )
   
-  opt_parser <- OptionParser(description = "\nDownload refseq genomes from ncbi using a assembly_summary.txt file",
-                             option_list = option_list,
-                             add_help_option = TRUE,
-                             usage = "usage: get_refseq_genomes.R [options] \n---------------------------------",
-                             epilogue = "A. Angelov | 2020 | aangeloo@gmail.com")
+  opt_parser <- OptionParser(
+    description = "\n Download refseq genomes from ncbi using a assembly_summary.txt file\n
+ EXAMPLE to download representative complete genomes:\n
+ get_refseq_genomes.R -u -r -c -d\n",
+    option_list = option_list,
+    add_help_option = TRUE,
+    usage = "usage: get_refseq_genomes.R [options] \n---------------------------------",
+    epilogue = "A. Angelov | 2020 | aangeloo@gmail.com")
   opt <- parse_args(opt_parser, )
   
   # initialization variables
@@ -103,14 +111,21 @@
   # build rsync command, change protocol
   download_urls <- str_replace(download_urls, "^ftp", "rsync")
   
-  rsync <- function(x) {
-    system2("rsync", args = c("--progress", "--times", "--human-readable",  x, "download/"))
+  rsync <- function(x, unzip) {
+    # checks if file exists due to previous attempts
+    system2("rsync", args = c("--progress", "--times", "--human-readable",  
+                              "--update", x, "downloads/"))
+    
+    if(!unzip)                                                          # opt$keep is false by default
+      system2("gunzip", args = file.path("downloads", basename(x)) )
     }
   
   if(opt$download) {
     cat("Startind download of", n_files, "files\n")
-    lapply(download_urls[1:5], rsync)
-    cat("download of", n_files, "files finished, the files are in the download directory")
+    invisible(
+      lapply(download_urls[1:10], rsync, unzip = opt$keep) # opt$keep is false by default
+    )
+    cat("download of", n_files, "files finished, the files are in the downloads/ directory")
     #rsync(filelist)
   
   } else {
