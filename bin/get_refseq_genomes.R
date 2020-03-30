@@ -2,11 +2,18 @@
 
 # script to download RefSeq (bacterial) genomes from ncbi
 # use assembly_summary.txt to filter and get ftp paths to genomes of interest
-# and use curl to get files
+# and rsync in system calls to download
 # use hints from
-# https://www.ncbi.nlm.nih.gov/genome/doc/ftpfaq/#allcomplete
+# https://www.ncbi.nlm.nih.gov/genome/doc/ftpfaq/
 
-  PKGs <- c("data.table", "dplyr", "purrr","optparse", "curl")
+  PKGs <- c("data.table", "dplyr", "purrr","optparse", "curl", "stringr")
+  
+  # rsync is required for this script to run!
+  # just a check here for rsync
+  rsync_installed <- system("rsync --version", ignore.stdout = TRUE) == 0
+  if(!rsync_installed) {
+    stop("rsync is needed to run this script, and it was not found on your system!")
+  }
   
   invisible(
     lapply(PKGs, function(x) {suppressPackageStartupMessages(library(x, character.only = TRUE)) })
@@ -92,11 +99,20 @@
               )
   n_files <- length(download_urls)
   
-  # download data (or not)
-  #
+  # download data (or not)----
+  # build rsync command, change protocol
+  download_urls <- str_replace(download_urls, "^ftp", "rsync")
+  
+  rsync <- function(x) {
+    system2("rsync", args = c("--progress", "--times", "--human-readable",  x, "download/"))
+    }
+  
   if(opt$download) {
     cat("Startind download of", n_files, "files\n")
-    lapply(download_urls, function(x) download.file(x, destfile = file.path("refseq/", basename(x))) )
+    lapply(download_urls[1:5], rsync)
+    cat("download of", n_files, "files finished, the files are in the download directory")
+    #rsync(filelist)
+  
   } else {
     cat(paste(download_urls, "\n", sep = ""))
     cat(n_files, "files found\n")
