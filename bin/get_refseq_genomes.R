@@ -41,6 +41,8 @@
     make_option(c("-c", "--complete"), type = "logical", default = FALSE,
                 action = "store_true",
                 help = "download only complete genomes [default = %default]"),
+    make_option(c("-i", "--id"), type = "integer", 
+                help = "get only data for organisms with this taxid"),
     make_option(c("-d", "--download"), type = "logical", default = FALSE,
                 action = "store_true",
                 help = "by default, the script does not download data, 
@@ -94,6 +96,12 @@
   
   df <- read_summary(summary_file, opt$repres, opt$complete)
   
+  # if --id is used, filter data on taxid
+  if (!is.null(opt$id)) {
+    df <- df[df$taxid == opt$id, ]
+    cat("Genome data only for taxid", opt$id, "will be used\n")
+    }
+  
   # generate complete ftp urls
   
   download_urls <- file.path(
@@ -129,7 +137,7 @@
     #rsync(filelist)
   
   } else {
-    cat(paste(download_urls, "\n", sep = ""))
+    #cat(paste(download_urls, "\n", sep = ""))
     cat(n_files, "files found\n")
     cat("these will be downloaded if you use the '-d' option\n")
   }
