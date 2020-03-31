@@ -33,7 +33,7 @@
     make_option(c("-u", "--update"), type = "logical", default = FALSE, 
                 action = "store_true", # if '-u' is seen, set to TRUE
                 help = "download and use new assembly_summary.txt file from ncbi [default = %default]" ),
-    make_option(c("-t", "--type"), type = "character", default = "fna",
+    make_option(c("-f", "--ftype"), type = "character", default = "fna",
                 help = "type of sequence to download, possible values are 'fna', 'faa', 'gff', 'gtf', 'gbff', 'ft' [default = %default]"),
     make_option(c("-r", "--repres"), type = "logical", default = FALSE,
                 action = "store_true",
@@ -41,7 +41,7 @@
     make_option(c("-c", "--complete"), type = "logical", default = FALSE,
                 action = "store_true",
                 help = "download only complete genomes [default = %default]"),
-    make_option(c("-i", "--id"), type = "integer", 
+    make_option(c("-t", "--taxid"), type = "integer", 
                 help = "get only data for organisms with this taxid"),
     make_option(c("-d", "--download"), type = "logical", default = FALSE,
                 action = "store_true",
@@ -97,21 +97,21 @@
   df <- read_summary(summary_file, opt$repres, opt$complete)
   
   # if --id is used, filter data on taxid
-  if (!is.null(opt$id)) {
-    df <- df[df$taxid == opt$id, ]
-    cat("Genome data only for taxid", opt$id, "will be used\n")
+  if (!is.null(opt$taxid)) {
+    df <- df[df$taxid == opt$taxid, ]
+    cat("Genome data only for taxid", opt$taxid, "will be used\n")
     }
   
   # generate complete ftp urls
   
   download_urls <- file.path(
     df$ftp_path, paste(basename(df$ftp_path),
-    case_when(opt$type == "fna" ~ "_genomic.fna.gz",
-              opt$type == "faa" ~ "_protein.faa.gz",
-              opt$type == "gff" ~ "_genomic.gff.gz",
-              opt$type == "gtf" ~ "_genomic.gtf.gz",
-              opt$type == "gbff" ~ "_genomic.gbff.gz",
-              opt$type == "ft" ~ "_feature_table.txt.gz"), sep = "")
+    case_when(opt$ftype == "fna" ~ "_genomic.fna.gz",
+              opt$ftype == "faa" ~ "_protein.faa.gz",
+              opt$ftype == "gff" ~ "_genomic.gff.gz",
+              opt$ftype == "gtf" ~ "_genomic.gtf.gz",
+              opt$ftype == "gbff" ~ "_genomic.gbff.gz",
+              opt$ftype == "ft" ~ "_feature_table.txt.gz"), sep = "")
               )
   n_files <- length(download_urls)
   
@@ -133,13 +133,13 @@
     invisible(
       lapply(download_urls[1:10], rsync, unzip = opt$keep) # opt$keep is false by default
     )
-    cat("download of", n_files, "files finished, the files are in the downloads/ directory")
+    cat("Download of", n_files, "files finished, the files are in the downloads/ directory")
     #rsync(filelist)
   
   } else {
     #cat(paste(download_urls, "\n", sep = ""))
-    cat(n_files, "files found\n")
-    cat("these will be downloaded if you use the '-d' option\n")
+    cat(n_files, opt$ftype,"files found\n")
+    cat("These will be downloaded if you use the '-d' option\n")
   }
   
   

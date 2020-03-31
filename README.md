@@ -97,6 +97,9 @@ In a terminal, do `bin/get_refseq_genomes.R -h` to get an idea how to use it. Fo
 get_refseq_genomes.R -urcd
 ```
 
+The script supports filtering by taxid, i.e. `get_refseq_genomes.R -u -d -t 1423` will download all *Bacillus subtilis* genomes. A great program for working with taxonomy data (and to get all taxids for a certain phylogenetic rank) is [taxonkit](https://github.com/shenwei356/taxonkit).
+
+
 ***
 
 
