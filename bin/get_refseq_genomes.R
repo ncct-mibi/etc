@@ -19,13 +19,6 @@
     lapply(PKGs, function(x) {suppressPackageStartupMessages(library(x, character.only = TRUE)) })
   )
 
-  # options are: 
-  # -s --seqsummary --> path to previously downloaded seqsummary file, default ~/db/seqsummary
-  # -u --update --> download new seqsummary file, do not use -s, default FALSE
-  # -r --repres --> logical, download representative genomes only, all otherwise, default TRUE
-  # -a --assembly --> character, filter by assembly level, options: complete, chromosome, contig, scaffold
-  # -d --dry --> dry run, do not download data, just list files to be downloaded
-  # -k --keep --> keep original files, gunzip otherwise
   
   option_list <- list(
     make_option(c("-s", "--seqsummary"), type = "character", default = "~/db/assembly_summary.txt", 
@@ -72,7 +65,7 @@
     summary_file <- file.path(getwd(), "assembly_summary.txt")
     cat("Downloading assembly_summary.txt, please wait...\n")
     download.file(seqsummary_url, destfile = summary_file)
-    cat("assembly_summary.txt downloaded and stored in", summary_file, "\n")
+    cat("assembly_summary.txt downloaded and stored in", summary_file, "\n\n")
     
   } else if ( file.exists(opt$seqsummary) ) {
     summary_file <- normalizePath(opt$seqsummary)
@@ -83,7 +76,7 @@
     
   # get timestamp of seqsummary file
   seqsummary_date <- file.info(summary_file)$mtime[1] %>% as.Date() 
-  cat("Using seqsummary file", summary_file, "from", as.character(seqsummary_date), "\n")
+  cat("Using seqsummary file", summary_file, "from", as.character(seqsummary_date), "\n\n")
   
   # 
   # read seqsummary in df, apply filters according to opts
@@ -120,7 +113,7 @@
   download_urls <- str_replace(download_urls, "^ftp", "rsync")
   
   rsync <- function(x, unzip) {
-    # checks if file exists due to previous attempts
+    # checks also if file exists due to previous attempts
     system2("rsync", args = c("--progress", "--times", "--human-readable",  
                               "--update", x, "downloads/"))
     
@@ -129,12 +122,22 @@
     }
   
   if(opt$download) {
-    cat("Startind download of", n_files, "files\n")
+    cat("Below are the first 5 of", n_files, "files that will be downloaded:\n\n")
+    
+    cat(head(download_urls, n = 5), rep(".", times = 3), sep = "\n")  # :))
+    
+    cat("Type [yes] and press [enter] to start the download of", n_files, "files or just press [enter] to exit\n")
+    
+    ANSWER <- readLines("stdin", n = 1, )
+    if(ANSWER == "yes") {
     invisible(
-      lapply(download_urls[1:10], rsync, unzip = opt$keep) # opt$keep is false by default
+      lapply(download_urls[1:3], rsync, unzip = opt$keep) # opt$keep is false by default
     )
     cat("Download of", n_files, "files finished, the files are in the downloads/ directory")
     #rsync(filelist)
+    } else {
+      stop("Program stopped, nothing will be downloaded!", call. = FALSE)
+    }
   
   } else {
     #cat(paste(download_urls, "\n", sep = ""))
