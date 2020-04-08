@@ -40,6 +40,9 @@
                 action = "store_true",
                 help = "by default, the script does not download data, 
                 use this option to ACTUALLY DOWNLOAD - might take a while! [default = %default] "),
+    make_option(c("-x", "--expert"), type = "logical", default = FALSE,
+                action = "store_true",
+                help = "use this to skip pause and ask to download, use this WITH CARE - the download starts without user input"),
     make_option(c("-k", "--keep"), type = "logical", default = FALSE, 
                 action = "store_true", 
                 help = "keep original (.gz) files, by default they are unzipped [default = %default]")
@@ -118,8 +121,14 @@
                               "--update", x, "downloads/"))
     
     if(!unzip)                                                          # opt$keep is false by default
-      system2("gunzip", args = file.path("downloads", basename(x)) )
+      system2("gunzip", args = c("-f", file.path("downloads", basename(x)) )
+              )
     }
+  # if option$expert - go directly to download!
+  if(opt$expert) {
+    opt$download <- TRUE
+    ANSWER <- "yes"
+  }
   
   if(opt$download) {
     cat("Below are the first 5 of", n_files, "files that will be downloaded:\n\n")
@@ -128,7 +137,10 @@
     
     cat("Type [yes] and press [enter] to start the download of", n_files, "files or just press [enter] to exit\n")
     
-    ANSWER <- readLines("stdin", n = 1, )
+    if(!opt$expert) {
+      ANSWER <- readLines("stdin", n = 1) # pause only if opt$expert is false
+    }
+    
     if(ANSWER == "yes") {
     invisible(
       lapply(download_urls[1:3], rsync, unzip = opt$keep) # opt$keep is false by default
