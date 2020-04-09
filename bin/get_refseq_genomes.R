@@ -43,9 +43,9 @@
     make_option(c("-x", "--expert"), type = "logical", default = FALSE,
                 action = "store_true",
                 help = "use this to skip pause and ask to download, use this WITH CARE - the download starts without user input"),
-    make_option(c("-k", "--keep"), type = "logical", default = FALSE, 
+    make_option(c("-e", "--extract"), type = "logical", default = FALSE, 
                 action = "store_true", 
-                help = "keep original (.gz) files, by default they are unzipped [default = %default]")
+                help = "extract gz files after downloading, by default they are kept as is [default = %default]")
   )
   
   opt_parser <- OptionParser(
@@ -56,7 +56,7 @@
     add_help_option = TRUE,
     usage = "usage: get_refseq_genomes.R [options] \n---------------------------------",
     epilogue = "A. Angelov | 2020 | aangeloo@gmail.com")
-  opt <- parse_args(opt_parser, )
+  opt <- parse_args(opt_parser)
   
   # initialization variables
   seqsummary_url <- "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt"
@@ -120,9 +120,8 @@
     system2("rsync", args = c("--progress", "--times", "--human-readable",  
                               "--update", x, "downloads/"))
     
-    if(!unzip)                                                          # opt$keep is false by default
-      system2("gunzip", args = c("-f", file.path("downloads", basename(x)) )
-              )
+    if(unzip)                                                          
+      system2("gunzip", args = c("-f", file.path("downloads", basename(x)) ))
     }
   # if option$expert - go directly to download!
   if(opt$expert) {
@@ -143,7 +142,7 @@
     
     if(ANSWER == "yes") {
     invisible(
-      lapply(download_urls[1:3], rsync, unzip = opt$keep) # opt$keep is false by default
+      lapply(download_urls[1:3], rsync, unzip = opt$extract) # opt$keep is false by default
     )
     cat("Download of", n_files, "files finished, the files are in the downloads/ directory")
     #rsync(filelist)
