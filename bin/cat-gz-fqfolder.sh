@@ -1,8 +1,9 @@
 #! /usr/bin/env sh
 
 # script used to prep raw ONT data for transfer to qbic
-# merges and then gzips all fastq files found in fastq_passed and fastq_failed folders
-# finds all the fastq_passed/failed recursively
+# merges and then gzips all fastq files found in fastq_passed and fastq_failed folders 
+# fast5_passed/failed are not touched
+# finds all the fastq_passed/failed folders recursively
 
 # takes 2 args:
 # 1 arg is a folder containing fastq_passed and fastq_failed folders,
@@ -10,7 +11,7 @@
 # does cat on all fastq files found there, gzips and deletes original fastq
 
 if [ "$#" -ne 2 ]; then
-	echo "Two arguments required: 1) folder to search and 2) barcode. You have used $#"
+	echo "Two arguments required: 1) folder to search and 2) barcode. You have used $# arguments."
 	exit 1
 fi
 
@@ -35,7 +36,7 @@ if  [ "$confirm" == "no" ]; then
 	echo "Nothing will be deleted, quitting."
 	exit 1
 elif [ "$confirm" == "yes" ]; then
-	echo "Deleting ..."
+	echo "Deleting..."
 
 	find "$1" \
 	-type d \
