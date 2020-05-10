@@ -10,21 +10,37 @@
 # does cat on all fastq files found there, gzips and deletes original fastq
 
 if [ "$#" -ne 2 ]; then
-    echo "Illegal number of parameters"
-		exit 1
+	echo "Two arguments required: 1) folder to search and 2) barcode. You have used $#"
+	exit 1
 fi
 
 find "$1" \
 -type d \
 -name 'fastq_*' \
+-ls \
 -execdir sh -c '
-	cat {}/*.fastq > {}/"$1"_$(basename {}).fastq && pigz -v -f {}/"$1"_$(basename {}).fastq
+	cat {}/*.fastq > {}/"$1"_$(basename {}).fastq && pigz -f {}/"$1"_$(basename {}).fastq
 	' \
 sh "$2" ";"
 # for the sh- c script: sh is $0 and "$2" is $1
 
 # second pass to delete original fastq files
-find "$1" \
--type f \
--name "*.fastq" \
--exec echo {} deleted ";"
+echo "The above directories were visited and the fastq file there were merged.\n\
+The origina fastq files there will now be deleted.\n\
+Type [yes] or [no]  and press [ENTER] to continue."
+read confirm
+
+if  [ "$confirm" == "no" ]; then
+	echo "Nothing will be deleted, quitting."
+	exit 1
+elif [ "$confirm" == "yes" ]; then
+	echo "Deleting ..."
+
+	find "$1" \
+	-type d \
+	-name "fastq_*" \
+	-exec sh -c 'rm -v {}/*.fastq' ";"
+else
+	echo "Type [yes] or [no] and press [ENTER]"
+	exit 1
+fi
