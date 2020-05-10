@@ -2,7 +2,7 @@
 
 # script used to prep raw ONT data for transfer to qbic
 # merges and then gzips all fastq files found in fastq_passed and fastq_failed folders
-# finds the fastq_passed/failed recursively
+# finds all the fastq_passed/failed recursively
 
 # takes 2 args:
 # 1 arg is a folder containing fastq_passed and fastq_failed folders,
@@ -14,6 +14,7 @@ if [ "$#" -ne 2 ]; then
 	exit 1
 fi
 
+# using pigz for parallel gzip, much faster of course
 find "$1" \
 -type d \
 -name 'fastq_*' \
@@ -25,7 +26,7 @@ sh "$2" ";"
 # for the sh- c script: sh is $0 and "$2" is $1
 
 # second pass to delete original fastq files
-echo "The above directories were visited and the fastq file there were merged.\n\
+echo "The above directories were visited and the fastq file there were merged and gzipped.\n\
 The origina fastq files there will now be deleted.\n\
 Type [yes] or [no]  and press [ENTER] to continue."
 read confirm
