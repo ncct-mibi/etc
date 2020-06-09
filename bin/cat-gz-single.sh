@@ -15,6 +15,8 @@ if [ "$#" -ne 2 ]; then
 	exit 1
 fi
 
+# https://unix.stackexchange.com/questions/389705/understanding-the-exec-option-of-find/389706
+
 # using pigz for parallel gzip, much faster of course
 find "$1" \
 -type d \

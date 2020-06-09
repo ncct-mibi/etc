@@ -13,10 +13,12 @@
 if [ "$#" -ne 2 ]; then
 	echo "Two arguments required:
 1) path to fastq_ folders, e.g. /path/to/fastq_pass or /path/to/fastq_fail
-2) QBiC barcode pattern, common for all samples, e.g. QNANO*
+2) QBiC barcode pattern, common for all samples, e.g. 'QNANO*' (use single quotes)
 You have used $# arguments."
 	exit 1
 fi
+
+# https://unix.stackexchange.com/questions/389705/understanding-the-exec-option-of-find/389706
 
 # using pigz for parallel gzip, much faster of course
 find "$1" \
