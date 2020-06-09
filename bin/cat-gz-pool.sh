@@ -26,10 +26,14 @@ find "$1" \
 -name "$2" \
 -ls \
 -execdir sh -c '
-	cat {}/*.fastq > {}/{}.fastq && pigz -f {}/{}.fastq
+	[ -n "$(find {} -name '*.fastq')" ] && cat {}/*.fastq > {}/{}.fastq && pigz -f {}/{}.fastq
 	' \
 sh ";"
-# 
+
+# explanation:
+# [ -n "$(find {} -name '*fastq' | head -1)" ]
+# check if fastq files are found in the directory before executing cat ...
+
 
 # second pass to delete original fastq files
 echo "The above directories were visited and the fastq file there were merged and gzipped.\n\

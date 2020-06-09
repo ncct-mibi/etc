@@ -23,7 +23,7 @@ find "$1" \
 -name 'fastq_*' \
 -ls \
 -execdir sh -c '
-	cat {}/*.fastq > {}/"$1"_$(basename {}).fastq && pigz -f {}/"$1"_$(basename {}).fastq
+	[ -n "$(find {} -name '*.fastq')" ] && cat {}/*.fastq > {}/"$1"_$(basename {}).fastq && pigz -f {}/"$1"_$(basename {}).fastq
 	' \
 sh "$2" ";"
 # for the sh- c script: sh is $0 and "$2" is $1
