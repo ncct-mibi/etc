@@ -33,7 +33,7 @@ sh ";"
 # explanation:
 # [ -n "$(find {} -name '*fastq' | head -1)" ]
 # check if fastq files are found in the directory before executing cat ...
-
+# otherwise the new fastq file is generated even if no files there
 
 # second pass to delete original fastq files
 echo "The above directories were visited and the fastq file there were merged and gzipped.\n\

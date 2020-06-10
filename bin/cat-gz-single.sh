@@ -28,6 +28,11 @@ find "$1" \
 sh "$2" ";"
 # for the sh- c script: sh is $0 and "$2" is $1
 
+# explanation:
+# [ -n "$(find {} -name '*fastq' | head -1)" ]
+# check if fastq files are found in the directory before executing cat ...
+# otherwise the new fastq file is generated even if no files there
+
 # second pass to delete original fastq files
 echo "The above directories were visited and the fastq file there were merged and gzipped.\n\
 The original fastq files there will now be deleted.\n\
