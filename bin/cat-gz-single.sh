@@ -39,10 +39,10 @@ The original fastq files there will now be deleted.\n\
 Type [yes] or [no]  and press [ENTER] to continue."
 read confirm
 
-if  [ "$confirm" == "no" ]; then
+if  [ "$confirm" = "no" ]; then
 	echo "Nothing will be deleted, quitting."
 	exit 1
-elif [ "$confirm" == "yes" ]; then
+elif [ "$confirm" = "yes" ]; then
 	echo "Deleting..."
 
 	find "$1" \
