@@ -23,9 +23,17 @@ fi
 # https://unix.stackexchange.com/questions/389705/understanding-the-exec-option-of-find/389706
 # fast5 folders are left untouched
 
+#fastqfolders=("fastq_fail" "fastq_pass")
+#for f in ${fastqfolders[@]}
+#do
+
+#done
+
+#
 find "$1" \
+-path "*fastq_*" \
 -type d \
--name "fastq_*/$2" \
+-name "$2" \
 -ls \
 -execdir sh -c '
 	[ -n "$(find {} -name '*.fastq')" ] && cat {}/*.fastq > {}/{}.fastq && pigz -f {}/{}.fastq
@@ -48,6 +56,7 @@ elif [ "$confirm" = "yes" ]; then
 	echo "Deleting..."
 
 	find "$1" \
+    -path "*fastq_*" \
 	-type d \
 	-name "$2" \
 	-execdir sh -c 'rm -v {}/*.fastq' sh ';'

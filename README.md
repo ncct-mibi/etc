@@ -24,7 +24,7 @@ After that, the script can be run directly from terminal (but adjust the shebang
 
 ## Merge lane-splitted `fastq` files
 
-**File:** `bin/mergefq_name.R`   
+**Function:** `bin/mergefq_name.R`   
 
 **Required:** `stringr`   
 Sometimes you get `fastq` files which are split by lane, that is, the sequences from one sample are split in several different directories and files. This is the default behaviour of Basespace, or if the `bcl2fastq` was executed without the `--no-lane-splitting` option. The file structure in such cases might look like this:
@@ -59,7 +59,7 @@ mergefq_name(pattern = "sampleID_regex_pattern")
 
 ## Merge resequenced libraries
 
-**File:** `bin/mergefq_reseq.R`       
+**Function:** `bin/mergefq_reseq.R`       
 
 **Required:**  `stringr` `magrittr`   
 
@@ -102,10 +102,44 @@ The script supports filtering by taxid, i.e. `get_refseq_genomes.R -u -d -t 1423
 
 ***
 
+## Find the edit distance in two sets of sequences
+
+**Function:** `bin/edist.R`   
+Function to count the number of differences between two strings of equal length, to be used for e.g. 
+index pool designs in Illumina seq
+
+**Required:** `stringr`
+
+**Usage:**   
+*INPUT*   
+`a = string1, b = string2`, string2 can be a string vector!!!
+
+*OUTPUT*   
+integer, edit distance (number of changes needed to get from a to b). If b is a string vector, a list is returned with position(minpos), edit distance (minedist) and sequence (minseq) of the most similar string in the vector
+
+```
+# for a single a vector, b can be a list:
+edist(a, b)
+
+# for a list of a arguments:
+map_df(a, edist, b) 
+
+# or even 
+cbind(celero, map_df(celero$index1, edist, xt$i7_bases))
+```
+
+**Advanced usage:**   
+To check one character vector (charvec) of indices for the next closest index:
+
+```
+map_df(1:length(charvec), function(x) { edist(charvec[x], charvec[-x]) })
+```
+
+***
 
 ## Subset protein `fasta` file
 
-**File:** `bin/subset_proteins.R`   
+**Rscript:** `bin/subset_proteins.R`   
 **Required:** `Biostrings`, `stringr`   
 This `R` function takes a string vector of protein fasta headers and a protein fasta file and returns the protein sequences with matching headers. Partial or exact match is supported (partial means that the string from beginning of the line upto the next whitespace is used in the search).   
 **Usage:**   
