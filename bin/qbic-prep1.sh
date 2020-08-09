@@ -3,7 +3,7 @@
 # script used to prep raw ONT data for transfer to qbic
 
 # prep1 - rename barcode to qbic number using a csv
-# usage - redirect output to a sh file and execute after checking everything is OK
+# usage - execute after checking everything is OK
 
 # takes 2 args:
 # 1 arg is a path to a flow cell folder, 
@@ -12,7 +12,7 @@
 # check # of args
 if [ "$#" -ne 2 ]; then
 	echo "Two arguments required:
-1) path to flow cell folder, which contains fastq_pass, fastq_fail, fast5_pass...
+1) path to flow cell folder, which contains fastq_pass/barcode01, fastq_fail/barcode01, fast5_pass/barcode01...
 2) a ',' separated csv file with unix line endings. First column is barcode01, barcode02..., second column is target name 
 You have used $# arguments."
 	exit 1
@@ -28,15 +28,15 @@ do
     # https://stackoverflow.com/questions/369758/how-to-trim-whitespace-from-a-bash-variable
     while IFS="," read col1 col2
     do
-    # check if dir exists and rename only if so 
+    # check if dir exists 
     currentdir="$1"/$f/${col1// /}
-    [ -d $currentdir ] && echo mv "$1"/$f/${col1// /} "$1"/$f/${col2// /} || echo folder ${currentdir} not found!
+    [ -d $currentdir ] && echo "$1"/$f/${col1// /} "-->>" "$1"/$f/${col2// /} || echo folder ${currentdir} not found!
     done < "$2"
 
 done
 
 # second pass to actually rename
-echo "To actually execute the above commands type [yes] and press [ENTER]. Otherwise just [ENTER]."
+echo "To actually rename the above directories type [yes] and press [ENTER]. Otherwise just [ENTER]."
 read confirm
 
 if  [ "$confirm" = "yes" ]; then
