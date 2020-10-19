@@ -57,7 +57,7 @@ mergefq_name(pattern = "sampleID_regex_pattern")
 
 ***
 
-## Merge resequenced libraries
+## Merge re-sequenced Illumina libraries
 
 **Function:** `bin/mergefq_reseq.R`       
 
@@ -139,10 +139,16 @@ map_df(1:length(charvec), function(x) { edist(charvec[x], charvec[-x]) })
 
 ## Subset protein `fasta` file
 
-**Rscript:** `bin/subset_proteins.R`   
-**Required:** `Biostrings`, `stringr`   
+**Function:** `bin/subset_proteins.R`   
 This `R` function takes a string vector of protein fasta headers and a protein fasta file and returns the protein sequences with matching headers. Partial or exact match is supported (partial means that the string from beginning of the line upto the next whitespace is used in the search).   
+
+**Required:** `Biostrings`, `stringr`   
+
 **Usage:**   
 In an `R` session, do:
-`devtools::source_url("https://raw.githubusercontent.com/angelovangel/etc/master/bin/subset_proteins.R")`   
+
+```
+devtools::source_url("https://raw.githubusercontent.com/angelovangel/etc/master/bin/subset_proteins.R")
+```
+
 Then the function `subset_proteins()` should be available in your session.
