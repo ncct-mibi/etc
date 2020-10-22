@@ -1,9 +1,15 @@
-#!/bin/bash
-date=$(date +'%Y-%m-%dH')
-while IFS="," read -r ob nb
+#!/usr/bin/env bash
+
+# 
+# usage rename-ilmn.sh < rename.csv > rename.sh
+# generate rename.sh, which is then visually checked if OK and executed
+
+
+#date=$(date +'%Y-%m-%d')
+while IFS=";" read ob nb
 do
   for f in "$ob"*
   do
-    echo mv -v $f "$nb"_"$f" > $date-rename.sh
+    echo mv -v $f "$nb"_"$ob"
   done
-done < $1
+done
