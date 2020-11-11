@@ -35,7 +35,16 @@ samplename=$(basename ${2%%.*})
 
 minimap2 -t $processors -ax map-ont $1 $2 > $samplename.sam
 
-samtools view -S -b -@ $processors $samplename.sam | \
-samtools sort -@ $processors -o $samplename.bam -
+SAMFILE=$samplename.sam
+if [ -f "$SAMFILE" ]; then
+    echo "$FILE exists and will be used to make a sorted and indexed bam..."
+    
+    samtools view -S -b -@ $processors $SAMFILE | \
+    samtools sort -@ $processors -o $samplename.bam -
+    samtools index -@ $processors $samplename.bam
 
-samtools index -@ $processors $samplename.bam
+    rm $SAMFILE
+else 
+    echo "$SAMFILE does not exist."
+    exit 2
+fi
