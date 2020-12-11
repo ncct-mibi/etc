@@ -1,4 +1,4 @@
-#!/usr/local/bin/Rscript
+#!/usr/bin/env Rscript
 
 # script to download RefSeq (bacterial) genomes from ncbi
 # use assembly_summary.txt to filter and get ftp paths to genomes of interest
