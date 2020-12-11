@@ -4,7 +4,7 @@
 # timestamps in nanopore fastq are:
 # start_time=2020-09-23T14:20:24Z
 
-# input: pass (1) minutes [integer] and 1 or more fastq file (path) and as args
+# input: pass (1) minutes [integer] and 1 or more fastq file (path) as args
 # output: write reads that are between min (start time) and minutes to a new file
 
 # algorithm:
@@ -61,9 +61,9 @@
  
    writeLines(filtered_stamps, con = tempfile)
 
-   # and use in seqkit
-   system2("seqkit", 
- 				 args = c("grep", "-n", "-r", "-f", tempfile, fq) , 
+   # and use in faster, has to be available in your path
+   system2("faster", 
+ 				 args = c("--regex_file", tempfile, fq) , 
  				 stdout = fqfile_out
  				 )
 
