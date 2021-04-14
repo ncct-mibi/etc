@@ -14,6 +14,12 @@
 # for a list of a arguments, map_df(a, edist, b) 
 # or even cbind(celero, map_df(celero$index1, edist, xt$i7_bases))
 ###
+
+## ADVANCED USAGE
+# to check one character vector (charvec) of indices for the next closest index:
+# map_df(1:length(charvec), function(x) { edist(charvec[x], charvec[-x]) })
+
+###
 edist <- function(a, b) {
   require(stringr)
   #if(!is.character(a) | !is.character(b))  stop("Both arguments must be characters!")
@@ -28,9 +34,10 @@ edist <- function(a, b) {
       #unlist(sumslist)
       return(
         list(
-      minpos = which.min(unlist(sumslist)),
-      minedist = min(unlist(sumslist)),
-      minseq = b[which.min(unlist(sumslist))]
+      qseq = a,
+      minhitseq = b[which.min(unlist(sumslist))],
+      minhitpos = which.min(unlist(sumslist)),
+      minhitedist = min(unlist(sumslist))
         )
       )
   } else {

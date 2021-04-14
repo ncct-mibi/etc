@@ -130,7 +130,7 @@ if(length(fq_fwd) < 1) {
 }
 
 fq_rev <- read_files(fastq_path, 'R2')
-if(length(fq_fwd) < 1) {
+if(length(fq_rev) < 1) {
   cat(crayon::bgYellow("No fastq files found. Did you correctly specify the folder with the fastq files?"), "Exiting...", sep = "\n")
   stop("No fastq files found")
 } else {
