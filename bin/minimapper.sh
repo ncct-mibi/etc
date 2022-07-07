@@ -30,14 +30,16 @@ done
 shift $((OPTIND -1))
 
 
-samplename=$(basename ${2%%.*})
-#echo $samplename
+strip=${2%.*}
+samplename=$(basename $strip | cut -d. -f1) # this seems to be the only secure wa for now to get basename with no extensions
+echo $samplename
+exit 2 
 
 minimap2 -t $processors -ax map-ont $1 $2 > $samplename.sam
 
 SAMFILE=$samplename.sam
 if [ -f "$SAMFILE" ]; then
-    echo "$FILE exists and will be used to make a sorted and indexed bam..."
+    echo "$SAMFILE exists and will be used to make a sorted and indexed bam..."
     
     samtools view -S -b -@ $processors $SAMFILE | \
     samtools sort -@ $processors -o $samplename.bam -
