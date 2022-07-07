@@ -30,10 +30,10 @@ done
 shift $((OPTIND -1))
 
 
-strip=${2%.*}
-samplename=$(basename $strip | cut -d. -f1) # this seems to be the only secure wa for now to get basename with no extensions
+#strip=${2%.*}
+samplename=$(basename $2 | cut -d. -f1) # this seems to be the only secure way for now to get basename with no extensions
 echo $samplename
-exit 2 
+#exit 2 
 
 minimap2 -t $processors -ax map-ont $1 $2 > $samplename.sam
 
