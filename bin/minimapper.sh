@@ -12,6 +12,9 @@ usage()
 
 # output is sample.bam (sorted bam, if sample.fastq was input)
 
+# set default
+processors=4
+
 while getopts ":p:" c; do
   case ${c} in
     p )
@@ -33,6 +36,7 @@ shift $((OPTIND -1))
 #strip=${2%.*}
 samplename=$(basename $2 | cut -d. -f1) # this seems to be the only secure way for now to get basename with no extensions
 echo $samplename
+#echo $processors
 #exit 2 
 
 minimap2 -t $processors -ax map-ont $1 $2 > $samplename.sam
