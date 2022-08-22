@@ -3,6 +3,8 @@
 
 # usage
 # purrr::map_dfr(file_list, process_ab1)
+# or for large number of files use multi cores
+# furrr::future_map_dfr(august, get_ab1_quality)
 
 get_ab1_quality <- function(abfile) {
   require(sangeranalyseR)
