@@ -6,17 +6,18 @@
 # positional args are:
 # 1 pod5 folder
 # 2 path to model to use 
-# name of output duplex fastq file
+# 3 name of output duplex fastq file
 
 
 
 set -e
 
 # check # of args
-if [ "$#" -ne 2 ]; then
-	echo "2 arguments required:
+if [ "$#" -ne 3 ]; then
+	echo "3 arguments required:
 1) path to pod5s folder
 2) path to dorado model to use
+3) name of output duplex fastq file
 You have used $# arguments."
 	exit 1
 fi
