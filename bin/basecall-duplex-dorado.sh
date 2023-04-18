@@ -58,4 +58,4 @@ dorado duplex \
     "$2" \
     "$1" \
     --emit-fastq \
-    --pairs basecall_duplex/pairs_from_bam/pair_ids_filtered.txt > basecall_duplex/"$3".fastq
+    --pairs basecall_duplex/pairs_from_bam/pair_ids_filtered.txt > basecall_duplex/"$3"
