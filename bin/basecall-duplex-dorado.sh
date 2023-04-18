@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 # duplex guppy basecalling using duplex_tools to find read pairs
-# duplex_tools and dorado (GPU!) should be installed and in your path
+# duplex_tools, samtools and dorado (GPU!) should be installed and in your path
 
 # positional args are:
 # 1 pod5 folder
