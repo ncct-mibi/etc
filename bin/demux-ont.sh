@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# demux ont fastq files, using the barcodeXX in the read names
-# when re-basecalling multiplexed runs all fastq end up in one file
+# demux ont fastq files, using the barcodeXX in the file names 
+# when re-basecalling multiplexed runs all fastq can end up in one file, if --detect_barcodes was not used
 # this script takes the sequencing summary.txt and the fastq and outputs fastq per barcode (found 'barcode' keyword in the sequencing_summary.txt)
 # seqkit and faster are required in your path
 

@@ -22,10 +22,10 @@ You have used $# arguments."
 fi
 
 # check if fast5_pass and fastq_pass are there
-if [ ! -d "" ]; then
-	echo ""
-	exit 1
-fi
+# if [ ! -d "" ]; then
+# 	echo ""
+# 	exit 1
+# fi
 
 
 echo "writing pair ids..."
