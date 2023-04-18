@@ -6,9 +6,9 @@
 # positional args are:
 # 1 pod5 folder
 # 2 path to model to use 
-# pod5_pass must be there
+# name of output duplex fastq file
 
-# outputs duplex reads to stdout
+
 
 set -e
 
@@ -57,4 +57,4 @@ dorado duplex \
     "$2" \
     "$1" \
     --emit-fastq \
-    --pairs basecall_duplex/pairs_from_bam/pair_ids_filtered.txt #> basecall_duplex/duplex_reads.fastq
+    --pairs basecall_duplex/pairs_from_bam/pair_ids_filtered.txt > basecall_duplex/"$3".fastq
