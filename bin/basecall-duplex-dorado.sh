@@ -45,6 +45,9 @@ dorado basecaller \
     "$1" | samtools view -Sh > basecall_duplex/reads.bam
     #--emit-moves > basecall_duplex/reads_with_moves.sam 2>&1 | tee -a basecall_duplex/basecall_duplex.log
 
+# make fastq if needed
+echo "running samtools fastq..."
+samtools fastq basecall_duplex/reads.bam > basecall_duplex/reads.fastq
 
 # 2
 echo "running duplex_tools..."
