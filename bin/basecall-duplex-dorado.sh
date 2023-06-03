@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# duplex guppy basecalling using duplex_tools to find read pairs
+# duplex dorado basecalling using duplex_tools to find read pairs
 # duplex_tools, samtools and dorado (GPU!) should be installed and in your path
 
 # positional args are:
