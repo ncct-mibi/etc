@@ -36,8 +36,8 @@ if [ $POD5FILES -le 0 ]; then
 fi
 
 # make outfile names
-SPXFILE=${3}_spx.fastq
-DPXFILE=${3}_dpx.fastq
+SPXFILE=${3}-spx.fastq
+DPXFILE=${3}-dpx.fastq
 
 echo === $(date "+%Y-%m-%d %H:%M:%S") Running dorado... ===
 
