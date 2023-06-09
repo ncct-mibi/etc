@@ -45,6 +45,10 @@ dorado duplex ${1} ${2} | \
 tee >(samtools view -h -d dx:1 - | samtools fastq > ${DPXFILE}) \
 >(samtools view -h -d dx:0 - | samtools fastq > ${SPXFILE}) > /dev/null
 
+# check for empty files and rm
+[ -s ${DPXFILE} ] || rm -rf ${DPXFILE}
+[ -s ${SPXFILE} ] || rm -rf ${SPXFILE}
+
 echo === $(date "+%Y-%m-%d %H:%M:%S") Running pigz... ===
 pigz ${DPXFILE}
 pigz ${SPXFILE}
