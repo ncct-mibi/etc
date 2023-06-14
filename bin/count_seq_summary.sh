@@ -12,5 +12,6 @@ z=$(awk '$12 ~ /TRUE/ {sum+=$16; count++} END {printf "x=%s \n y=%s", sum, count
 # this way only one pass is needed 
 # https://www.theunixschool.com/2012/08/awk-passing-awk-variables-to-shell.html
 eval $z
-printf "reads,bases\n"
-printf "%#d,%#d\n" $x $y
+file=$(basename ${1})
+#printf "file,reads,bases\n"
+printf "$file,%#d,%#d\n" $x $y
