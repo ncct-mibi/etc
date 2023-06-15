@@ -1,7 +1,6 @@
-#! /usr/bin/env ksh
+#! /usr/bin/env bash
 
 # pass a ONT sequencing summary file and return bases and reads (pass only)
-# use ksh to be able to return SI units automagically
 
 # get col index as they are not very consistent
 pass=$(head -1 ${1} | sed 's/\t/\n/g' | nl | grep 'passes_filtering' | cut -f 1)
@@ -21,5 +20,5 @@ END {printf "x=%s \n y=%s \n xf=%s \n yf=%s", sum, count, sumb, countb}' "${1}")
 # https://www.theunixschool.com/2012/08/awk-passing-awk-variables-to-shell.html
 eval $z
 file=$(basename ${1})
-#printf "file,pass_bases,pass_reads,fail_bases,fail_reads\n"
-printf "$file,%#d,%#d,%#d,%#d\n" $x $y $xf $yf
+#printf "file,pass_bases,fail_bases,pass_reads,fail_reads\n"
+printf "$file,%s,%s,%s,%s\n" $x $xf $y $yf
