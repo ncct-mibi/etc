@@ -9,7 +9,10 @@ len=$(head -1 ${1} | sed 's/\t/\n/g' | nl | grep 'sequence_length_template' | cu
 # 
 
 # bases \t reads
-z=$(awk -v a="$pass" -v b="$len" '$a ~ /TRUE/ {sum+=$b; count++} END {printf "x=%s \n y=%s", sum, count}' "${1}")
+z=$(awk -v a="$pass" -v b="$len" '$a == "TRUE" {sum+=$b; count++} $a == "FALSE" {sumb+=$b; countb++} 
+END {printf "x=%s \n y=%s \n xf=%s \n yf=%s", sum, count, sumb, countb}' "${1}")
+#z=$(awk -v a="$pass" -v b="$len" '$a ~ /TRUE/ {sum+=$b; count++} END {printf "x=%s \n y=%s", sum, count}' "${1}")
+
 #bases=$(awk '$12 ~ /TRUE/ {sum+=$16} END {printf "%s", sum}' "${1}")
 #reads=$(awk '$12 ~ /TRUE/ {count++} END {printf "%s", count}' "${1}")
 
@@ -18,5 +21,5 @@ z=$(awk -v a="$pass" -v b="$len" '$a ~ /TRUE/ {sum+=$b; count++} END {printf "x=
 # https://www.theunixschool.com/2012/08/awk-passing-awk-variables-to-shell.html
 eval $z
 file=$(basename ${1})
-#printf "file,reads,bases\n"
-printf "$file,%#d,%#d\n" $x $y
+#printf "file,pass_bases,pass_reads,fail_bases,fail_reads\n"
+printf "$file,%#d,%#d,%#d,%#d\n" $x $y $xf $yf
