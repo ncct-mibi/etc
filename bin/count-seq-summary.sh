@@ -41,8 +41,8 @@ END {
         }
     }
 
-    # bases_pass, bases_fail, reads_pass, reads_fail, Nx_pass, Nx_fail
-    printf "%s,%s,%s,%s,%s,%s\n", sum, sum_f, count, count_f, nxvalue, nxvalue_f
+    # file, bases_pass, bases_fail, reads_pass, reads_fail, Nx_pass, Nx_fail
+    printf "%s,%s,%s,%s,%s,%s,%s\n", ARGV[1], sum, sum_f, count, count_f, nxvalue, nxvalue_f
     #printf "%s\n", nxvalue
 }' "${2}"
 
