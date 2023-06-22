@@ -1,27 +1,48 @@
 #! /usr/bin/env bash
 
-# pass a ONT sequencing summary file and return bases and reads (pass only)
+# pass a ONT sequencing summary file and return pass/fail bases, reads and Nx (pass only)
+# usage
+# count-seq-summary.sh nx file
 
 # get col index as they are not very consistent
-pass=$(head -1 ${1} | sed 's/\t/\n/g' | nl | grep 'passes_filtering' | cut -f 1)
-len=$(head -1 ${1} | sed 's/\t/\n/g' | nl | grep 'sequence_length_template' | cut -f 1)
+pass=$(head -1 ${2} | sed 's/\t/\n/g' | nl | grep 'passes_filtering' | cut -f 1)
+len=$(head -1 ${2} | sed 's/\t/\n/g' | nl | grep 'sequence_length_template' | cut -f 1)
 # 
 
 # bases \t reads
-z=$(gawk -v a="$pass" -v b="$len" '
-$a == "TRUE" {sum+=$b; count++}
-$a == "FALSE" {sumb+=$b; countb++} 
-END {printf "x=%s \n y=%s \n xf=%s \n yf=%s", sum, count, sumb, countb}
-' "${1}")
-#z=$(awk -v a="$pass" -v b="$len" '$a ~ /TRUE/ {sum+=$b; count++} END {printf "x=%s \n y=%s", sum, count}' "${1}")
+gawk -v nx="${1}" -v a="$pass" -v b="$len" '
+$a == "TRUE" {sum+=$b; count++; lenarray[idx++] = $b}
+$a == "FALSE" {sum_f+=$b; count_f++; lenarray_f[idx++] = $b}
 
-#bases=$(awk '$12 ~ /TRUE/ {sum+=$16} END {printf "%s", sum}' "${1}")
-#reads=$(awk '$12 ~ /TRUE/ {count++} END {printf "%s", count}' "${1}")
 
-# the above assigns bases and reads in awk and assigns to z, when z is evaluated x and y become shell variables
-# this way only one pass is needed 
-# https://www.theunixschool.com/2012/08/awk-passing-awk-variables-to-shell.html
-eval $z
-file=$(basename ${1})
-#printf "file,pass_bases,fail_bases,pass_reads,fail_reads\n"
-printf "$file,%s,%s,%s,%s\n" $x $xf $y $yf
+END {
+    halfsum = sum * nx; halfsum_f = sum_f * nx;
+    n = asort(lenarray); n_f = asort(lenarray_f);
+    i = n; j = n_f;
+    
+    # Nx pass
+    while (i >= 0) {
+        if (cumsum <= halfsum) {
+            cumsum += lenarray[i]
+            i--
+        } else {
+            nxvalue = lenarray[i]
+            break
+        }
+    }
+    # Nx fail
+    while (j >= 0) {
+        if (cumsum_f <= halfsum_f) {
+            cumsum_f += lenarray_f[j]
+            j--
+        } else {
+            nxvalue_f = lenarray_f[j]
+            break
+        }
+    }
+
+    # bases_pass, bases_fail, reads_pass, reads_fail, Nx_pass, Nx_fail
+    printf "%s,%s,%s,%s,%s,%s\n", sum, sum_f, count, count_f, nxvalue, nxvalue_f
+    #printf "%s\n", nxvalue
+}' "${2}"
+
