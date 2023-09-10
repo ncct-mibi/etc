@@ -54,7 +54,7 @@ while IFS="," read line; do
     [ "$(ls -A $currentdir)" ] && 
     echo "merging ${samplename}-${barcode}" && 
     cat $currentdir/*.fastq.gz > processed/fastq/$samplename.fastq.gz ||
-    echo folder ${currentdir} not found!
+    echo folder ${currentdir} not found or empty!
 done < "$1"
 
 # get fastq stats for the merged files
@@ -62,6 +62,6 @@ done < "$1"
 nsamples=$(ls -A processed/fastq/*.fastq.gz | wc -l)
 [ "$(ls -A processed/fastq/*.fastq.gz)" ] && 
 echo "Running faster on $nsamples samples ..." && 
-echo "file\treads\tbases\tn_bases\tmin_len\tmax_len\tmean_len\tQ1\tQ2\tQ3\tN50\tQ20_percent\tQ30_percent" > processed/fastq-stats.tsv &&
+echo -e "file\treads\tbases\tn_bases\tmin_len\tmax_len\tmean_len\tQ1\tQ2\tQ3\tN50\tQ20_percent\tQ30_percent" > processed/fastq-stats.tsv &&
 parallel -k faster -ts ::: processed/fastq/*.fastq.gz >> processed/fastq-stats.tsv || 
 echo "No fastq files found"
