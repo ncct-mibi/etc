@@ -39,21 +39,24 @@ if  [[ ! $samplename_idx =~ $num ]] || [[ ! $barcode_idx =~ $num ]]; then
     exit 2
 fi
 
-
+counter=0
 while IFS="," read line; do
     samplename=$(echo $line | cut -f $samplename_idx -d,)
     barcode=$(echo $line | cut -f $barcode_idx -d,)
     currentdir=${2}/${barcode// /}
+    ((counter++)) # counter to add to sample name
+    prefix=$(printf "%02d" $counter) # prepend zero
     # skip if barcode is NA or is not a valid barcode name. Also skip if there is no user or sample name specified
     if [[ $barcode != barcode[0-9][0-9] ]] || [[ $samplename == 'NA' ]]; then
         echo "skipping $line"
         continue
     fi
+    
     # check if dir exists and has files and cat
     [ -d $currentdir ] && 
     [ "$(ls -A $currentdir)" ] && 
     echo "merging ${samplename}-${barcode}" && 
-    cat $currentdir/*.fastq.gz > processed/fastq/$samplename.fastq.gz ||
+    cat $currentdir/*.fastq.gz > processed/fastq/${prefix}_${samplename}.fastq.gz ||
     echo folder ${currentdir} not found or empty!
 done < "$1"
 
