@@ -29,8 +29,8 @@ rm -rf processed
 mkdir -p processed/fastq
 
 # get col indexes
-samplename_idx=$(head -1 ${1} | sed 's/,/\n/g' | nl | grep 'sample' | cut -f 1)
-barcode_idx=$(head -1 ${1} | sed 's/,/\n/g' | nl | grep 'barcode' | cut -f 1)
+samplename_idx=$(head -1 ${1} | sed 's/,/\n/g' | nl | grep -E 'S|sample' | cut -f 1)
+barcode_idx=$(head -1 ${1} | sed 's/,/\n/g' | nl | grep -E 'B|barcode' | cut -f 1)
 
 # check samplesheet is valid
 num='[0-9]+'
