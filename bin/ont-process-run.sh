@@ -60,7 +60,8 @@ done < "$1"
 # get fastq stats for the merged files
 
 nsamples=$(ls -A processed/fastq/*.fastq.gz | wc -l)
-[ "$(ls -A processed/fastq/*.fastq.gz)" ] && \
+[ "$(ls -A processed/fastq/*.fastq.gz)" ] && 
 echo "Running faster on $nsamples samples ..." && 
-parallel faster -ts ::: processed/fastq/*.fastq.gz > processed/fastq-stats.tsv ||
+echo "file\treads\tbases\tn_bases\tmin_len\tmax_len\tmean_len\tQ1\tQ2\tQ3\tN50\tQ20_percent\tQ30_percent" > processed/fastq-stats.tsv &&
+parallel -k faster -ts ::: processed/fastq/*.fastq.gz >> processed/fastq-stats.tsv || 
 echo "No fastq files found"
