@@ -6,6 +6,7 @@
 # arg1 - csv file
 # a ',' separated csv file with unix line endings. Columns are sample and barcode, in any order
 #------------------------
+# sample, barcode
 # sample1, barcode01
 # sample2, barcode02
 #------------------------
@@ -27,6 +28,7 @@ fi
 echo "Results folder exists, will be deleted ..." && \
 rm -rf processed
 mkdir -p processed/fastq
+cp $1 processed/samplesheet.csv # make a copy of the sample sheet
 
 # get col indexes
 samplename_idx=$(head -1 ${1} | sed 's/,/\n/g' | nl | grep -E 'S|sample' | cut -f 1)
@@ -44,14 +46,13 @@ while IFS="," read line; do
     samplename=$(echo $line | cut -f $samplename_idx -d,)
     barcode=$(echo $line | cut -f $barcode_idx -d,)
     currentdir=${2}/${barcode// /}
-    ((counter++)) # counter to add to sample name
-    prefix=$(printf "%02d" $counter) # prepend zero
     # skip if barcode is NA or is not a valid barcode name. Also skip if there is no user or sample name specified
     if [[ $barcode != barcode[0-9][0-9] ]] || [[ $samplename == 'NA' ]]; then
         echo "skipping $line"
         continue
     fi
-    
+    ((counter++)) # counter to add to sample name
+    prefix=$(printf "%02d" $counter) # prepend zero
     # check if dir exists and has files and cat
     [ -d $currentdir ] && 
     [ "$(ls -A $currentdir)" ] && 
