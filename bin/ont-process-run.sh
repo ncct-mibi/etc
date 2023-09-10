@@ -55,7 +55,7 @@ while IFS="," read line; do
     # check if dir exists and has files and cat
     [ -d $currentdir ] && 
     [ "$(ls -A $currentdir)" ] && 
-    echo "merging ${samplename}-${barcode}" && 
+    echo "merging ${samplename} ----- ${barcode}" && 
     cat $currentdir/*.fastq.gz > processed/fastq/${prefix}_${samplename}.fastq.gz ||
     echo folder ${currentdir} not found or empty!
 done < "$1"
