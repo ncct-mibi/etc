@@ -77,7 +77,8 @@ done < $csvfile
 
 if [[ $makereport == 'true' ]] && [[ $(command -v faster-report.R) ]]; then
     [ "$(ls -A processed/fastq/*.fastq.gz)" ] && 
-    faster-report.R -p $(realpath processed/fastq) ||
+    faster-report.R -p $(realpath processed/fastq) &&
+    mv faster-report.html processed/faster-report.html ||
     echo "No fastq files found"
 else
     nsamples=$(ls -A processed/fastq/*.fastq.gz | wc -l)
