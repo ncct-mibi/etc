@@ -12,6 +12,9 @@ usage()
 
 # output is sample.bam (sorted bam, if sample.fastq was input)
 
+# set default
+processors=4
+
 while getopts ":p:" c; do
   case ${c} in
     p )
@@ -30,14 +33,17 @@ done
 shift $((OPTIND -1))
 
 
-samplename=$(basename ${2%%.*})
-#echo $samplename
+#strip=${2%.*}
+samplename=$(basename $2 | cut -d. -f1) # this seems to be the only secure way for now to get basename with no extensions
+echo $samplename
+#echo $processors
+#exit 2 
 
 minimap2 -t $processors -ax map-ont $1 $2 > $samplename.sam
 
 SAMFILE=$samplename.sam
 if [ -f "$SAMFILE" ]; then
-    echo "$FILE exists and will be used to make a sorted and indexed bam..."
+    echo "$SAMFILE exists and will be used to make a sorted and indexed bam..."
     
     samtools view -S -b -@ $processors $SAMFILE | \
     samtools sort -@ $processors -o $samplename.bam -
