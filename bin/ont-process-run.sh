@@ -3,24 +3,37 @@
 # cat, compress, rename fastq files from a fastq_pass based on csv sample-barcode sheet
 # runs faster (required dependency) to generate summary data
 
-# arg1 - csv file
-# a ',' separated csv file with unix line endings. Columns are sample and barcode, in any order
+# c - a path to csv file
+# ',' separated csv file with unix line endings. Columns are sample and barcode, in any order
 #------------------------
 # sample, barcode
 # sample1, barcode01
 # sample2, barcode02
 #------------------------
 
-# arg2 - path to fastq_pass
+# p - path to fastq_pass
+# option --report can be provided to run faster-report
 
-# checks
-if [[ $# -ne 2 ]]; then
-    echo "Two parameters needed: path/to/csv and path/to/fastq_pass" >&2
-    exit 2
-fi
+# r - option to make or not faster-report
 
-if [[ ! -f ${1} ]] || [[ ! -d ${2} ]]; then
-    echo "File ${1} or ${2} does not exist" >&2
+# setup
+makereport=false
+
+while getopts c:p:r flag
+do
+   case "${flag}" in
+      c) csvfile=${OPTARG};;
+      p) fastqpath=${OPTARG};;
+      r) makereport=true;;
+      ?) printf "Usage: %s -c samplesheet.csv -p fastq_pass -r \n" $0
+         exit 2;;
+   esac
+done
+
+shift "$(( OPTIND - 1 ))"
+
+if [[ ! -f ${csvfile} ]] || [[ ! -d ${fastqpath} ]]; then
+    echo "File ${csvfile} or ${fastqpath} does not exist" >&2
     exit 2
 fi
 
@@ -28,11 +41,11 @@ fi
 echo "Results folder exists, will be deleted ..." && \
 rm -rf processed
 mkdir -p processed/fastq
-cp $1 processed/samplesheet.csv # make a copy of the sample sheet
+cp $csvfile processed/samplesheet.csv # make a copy of the sample sheet
 
 # get col indexes
-samplename_idx=$(head -1 ${1} | sed 's/,/\n/g' | nl | grep -E 'S|sample' | cut -f 1)
-barcode_idx=$(head -1 ${1} | sed 's/,/\n/g' | nl | grep -E 'B|barcode' | cut -f 1)
+samplename_idx=$(head -1 ${csvfile} | sed 's/,/\n/g' | nl | grep -E 'S|sample' | cut -f 1)
+barcode_idx=$(head -1 ${csvfile} | sed 's/,/\n/g' | nl | grep -E 'B|barcode' | cut -f 1)
 
 # check samplesheet is valid
 num='[0-9]+'
@@ -45,7 +58,7 @@ counter=0
 while IFS="," read line; do
     samplename=$(echo $line | cut -f $samplename_idx -d,)
     barcode=$(echo $line | cut -f $barcode_idx -d,)
-    currentdir=${2}/${barcode// /}
+    currentdir=${fastqpath}/${barcode// /}
     # skip if barcode is NA or is not a valid barcode name. Also skip if there is no user or sample name specified
     if [[ $barcode != barcode[0-9][0-9] ]] || [[ $samplename == 'NA' ]]; then
         echo "skipping $line"
@@ -59,13 +72,21 @@ while IFS="," read line; do
     echo "merging ${samplename} ----- ${barcode}" && 
     cat $currentdir/*.fastq.gz > processed/fastq/${prefix}_${samplename}.fastq.gz ||
     echo folder ${currentdir} not found or empty!
-done < "$1"
+done < $csvfile
 
-# get fastq stats for the merged files
 
-nsamples=$(ls -A processed/fastq/*.fastq.gz | wc -l)
-[ "$(ls -A processed/fastq/*.fastq.gz)" ] && 
-echo "Running faster on $nsamples samples ..." && 
-echo -e "file\treads\tbases\tn_bases\tmin_len\tmax_len\tmean_len\tQ1\tQ2\tQ3\tN50\tQ20_percent\tQ30_percent" > processed/fastq-stats.tsv &&
-parallel -k faster -ts ::: processed/fastq/*.fastq.gz >> processed/fastq-stats.tsv || 
-echo "No fastq files found"
+if [[ $makereport == 'true' ]] && [[ $(command -v faster-report.R) ]]; then
+    [ "$(ls -A processed/fastq/*.fastq.gz)" ] && 
+    faster-report.R -p $(realpath processed/fastq) ||
+    echo "No fastq files found"
+else
+    nsamples=$(ls -A processed/fastq/*.fastq.gz | wc -l)
+    [ "$(ls -A processed/fastq/*.fastq.gz)" ] && 
+    echo "Running faster on $nsamples samples ..." && 
+    echo -e "file\treads\tbases\tn_bases\tmin_len\tmax_len\tmean_len\tQ1\tQ2\tQ3\tN50\tQ20_percent\tQ30_percent" > processed/fastq-stats.tsv &&
+    parallel -k faster -ts ::: processed/fastq/*.fastq.gz >> processed/fastq-stats.tsv || 
+    echo "No fastq files found"
+fi
+
+echo "Done!"
+
